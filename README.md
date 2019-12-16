@@ -4,9 +4,8 @@
 
 This is a collection of data reduction and analysis routines.  
 
-# Overview
-
 [pyspatialfield](#pyspatialfield): Analyse structures in spatial data by spatial moments.
+
 [pycomponents](#pycomponents): Analyse structures in datasets by principal components analysis.
 
 
