@@ -23,6 +23,14 @@ def get_linear_edge(component):
     min_y = component.center[1] - (delta_y / 2.)
     return Point(min_x, min_y), Point(max_x, max_y)
 
+def plot_image_with_annotation(img, x, y):
+    fig, ax = pl.subplots()
+    ax.imshow(img, cmap='gray')
+    ax.scatter(x, y, s=40, c='b', marker='o', )
+    ax.spines['top'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
 class Point(object):
 

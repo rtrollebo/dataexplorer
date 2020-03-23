@@ -67,6 +67,11 @@ class TestSpatialMoments(unittest.TestCase):
         area = field.area
         self.assertEqual(area, np.sum(field.data))
 
+    def test_get_feature_by_size(self):
+
+        pass
+
+
 if __name__ == '__main__':
     unittest.main()
 

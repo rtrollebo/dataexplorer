@@ -7,7 +7,7 @@ from pycomponents import component
 from explorer_util import datasource
 
 
-class TestPrincipalComponents(unittest.TestCase):
+class TestPrincipalComponents(unittest.TestCase): 
 
     @classmethod
     def setUpClass(cls):

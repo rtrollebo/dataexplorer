@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.ma as ma
+import scipy
 from scipy import ndimage
 
 
@@ -130,21 +131,28 @@ class FeatureField(object):
         raise NotImplementedError("create_field_with_features_from_image_files() not yet implemented")
 
     @staticmethod
-    def generate_from_single_image(decoder, threshold=50):
+    def generate_from_single_image(decoder, threshold=50, preprocess=None, decoder_callback=None):
         """
         Generates a label map from a data source
 
-        :param decoder: decoder of the data source
-        :param threshold: cut-off value
-        :return: label map
-        :rtype: numpy.ndarray
+        :param decoder: Decoder containing the image data.
+        :param threshold: Pixel intensity threshold
+        :param preprocess: Preprocessor function
+        :param decoder_callback: Decoder callback
+        :return: Tuple of decoded image and map with labelled features.
         """
-        array = decoder.decode()
-        if len(array.shape) == 3:
-            array = np.mean(array, 2)
+        img_array = decoder.decode(callback=decoder_callback)
+        if len(img_array.shape) == 3:
+            img_array = np.mean(img_array, 2)
+        if preprocess is not None:
+            array = preprocess(img_array)
+        else:
+            array = img_array
         masked_array = np.ma.masked_where(array > threshold, array, copy=True)
         labeled_map, n = ndimage.label(masked_array.mask)
-        return labeled_map
+        if preprocess is not None:
+            scipy.misc.imsave("testimg_masked.png", masked_array.mask.astype(int))
+        return (img_array, labeled_map)
 
     @staticmethod
     def get_feature_from_labelmap(map, label):
@@ -188,3 +196,55 @@ class FeatureField(object):
         binary_array = np.invert(masked_array.mask)
         labeled_map, n = ndimage.label(binary_array)
         return labeled_map
+
+    @staticmethod
+    def get_features_by_size(map):
+        unique = np.unique(map, return_counts=True)
+        return iter(sorted(list(zip(unique[0], unique[1])), key=lambda x: x[1], reverse=True))
+
+
+class EllipseFeature(object):
+
+    def __init__(self, semi_major_axis=None, semi_minor_axis=None):
+        self.semi_major_axis = semi_major_axis
+        self.semi_minor_axis = semi_minor_axis
+
+    def __repr__(self):
+        return "Semi-major axis: {0}, \nSemi-minor axis: {1}".format(self.semi_major_axis, self.semi_minor_axis)
+
+    def from_feature_field(self, field: FeatureField):
+        """
+        Calculates the ellipse parameters based on a FeatureField
+        :param field: The feature field from which to calculate the ellipsis.
+        :param type: FeatureField
+        :return:
+        """
+        self.from_moments(
+            field.spatial_center_moment((2, 0)),
+            field.spatial_center_moment((0, 2)),
+            field.spatial_center_moment((1, 1)))
+
+    def from_moments(self, mu20, mu02, mu11):
+        """
+        Calculates the ellipse parameters based on the mu_20, mu_02 and mu_11 spatial central moments.
+        :param mu20:
+        :param mu02:
+        :param mu11:
+        :return:
+        """
+        emax = self._eigv_max(mu20, mu02, mu11)
+        emin = self._eigv_min(mu20, mu02, mu11)
+        self.semi_major_axis = self._semiaxis_maj(emax, emin)
+        self.semi_minor_axis = self._semiaxis_min(emax, emin)
+
+    def _eigv_max(self, mu20, mu02, mu11):
+        return 0.5 * (mu20 + mu02 + np.sqrt((4 * (mu11 ** 2.)) + ((mu20 - mu02) ** 2.)))
+
+    def _eigv_min(self, mu20, mu02, mu11):
+        return 0.5 * (mu20 + mu02 - np.sqrt((4 * (mu11 ** 2.)) + ((mu20 - mu02) ** 2.)))
+
+    def _semiaxis_maj(self, emax, emin):
+        return ((4. / np.pi) ** (1. / 4.)) * (((emax ** 3) / emin) ** (1. / 8.))
+
+    def _semiaxis_min(self, emax, emin):
+        return ((4. / np.pi) ** (1. / 4.)) * (((emin ** 3) / emax) ** (1. / 8.))

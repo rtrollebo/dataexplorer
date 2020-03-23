@@ -22,5 +22,5 @@ This packages contains implementations of the *principal components* techniques,
 
 ### Examples
 
-Examples are available as Jupyter notebooks in [example1.ipynb](example1.ipynb).  
+Examples are available as Jupyter notebooks in [example_principal_components.ipynb](example_principal_components.ipynb) and [example_spatial_field.ipynb](example_spatial_field.ipynb). 
  

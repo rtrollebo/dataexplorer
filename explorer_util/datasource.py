@@ -2,6 +2,7 @@ import requests
 import numpy as np
 from PIL import Image as pilimage
 from io import BytesIO
+import base64
 from numpy import genfromtxt
 
 class DataSource(object):
@@ -43,7 +44,7 @@ class DataSource(object):
 
 class DataDecoder(object):
     """
-    Data decoder interface
+    Data decoder
     """
     def __init__(self, data):
         self.data = data
@@ -54,13 +55,10 @@ class DataDecoder(object):
         :param callback:
         :return:
         """
+        runner = CallbackRunner(input=self.data)
         if callback is not None:
-            return callback(self.data)
-        else:
-            return self.delegate()
-
-    def delegate(self):
-        return decode_image_to_array(self.data)
+            runner.add(callback)
+        return runner.add(decode_image_to_array).run()
 
     def inspect(self, buffer=None):
         """
@@ -92,5 +90,23 @@ def decode_image_to_array(membuf):
             memory_stream.close()
     return data_array
 
+def base64_decode(data):
+    return base64.b64decode(data)
 
 
+class CallbackRunner(object):
+
+    def __init__(self, input=None, callback=None):
+        self.data = input
+        self.callbacks = [callback] if callback is not None else []
+
+    def add(self, cb):
+        self.callbacks.append(cb)
+        return self
+
+    def run(self):
+        if self.data is not None:
+            processed_data = self.data
+            for f in self.callbacks:
+                processed_data = f(processed_data)
+            return processed_data
