@@ -1,6 +1,5 @@
 import numpy as np
 import numpy.ma as ma
-import scipy
 from scipy import ndimage
 
 
@@ -150,8 +149,6 @@ class FeatureField(object):
             array = img_array
         masked_array = np.ma.masked_where(array > threshold, array, copy=True)
         labeled_map, n = ndimage.label(masked_array.mask)
-        if preprocess is not None:
-            scipy.misc.imsave("testimg_masked.png", masked_array.mask.astype(int))
         return (img_array, labeled_map)
 
     @staticmethod

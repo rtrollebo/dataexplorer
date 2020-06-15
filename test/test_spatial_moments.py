@@ -35,6 +35,10 @@ class TestSpatialMoments(unittest.TestCase):
         cls.dataset_4[7, 3:7] = True
         cls.dataset_4[8, 5:7] = True
 
+        cls.dataset_5 = np.full((10, 10), 0, dtype=int)
+        cls.dataset_5[2:4, 2:4] = 1
+        cls.dataset_5[6:8, 2:5] = 2
+
 
     @classmethod
     def tearDownClass(cls):
@@ -68,8 +72,17 @@ class TestSpatialMoments(unittest.TestCase):
         self.assertEqual(area, np.sum(field.data))
 
     def test_get_feature_by_size(self):
-
-        pass
+        features = FeatureField.get_features_by_size(TestSpatialMoments.dataset_5)
+        (f1_label, f1_size), (f2_label, f2_size), (f3_label, f3_size) = list(features)
+        # label = 0: The largest feature (the background feature)
+        self.assertEqual(f1_label, 0)
+        self.assertEqual(f1_size, 10*10 - 2*2 - 3*2)
+        # label = 2: The second largest feature
+        self.assertEqual(f2_label, 2)
+        self.assertEqual(f2_size, 3 * 2)
+        # label = 1: The smallest feature
+        self.assertEqual(f3_label, 1)
+        self.assertEqual(f3_size, 2 * 2)
 
 
 if __name__ == '__main__':
