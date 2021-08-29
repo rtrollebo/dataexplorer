@@ -8,7 +8,6 @@ setup(
         'numpy>=1.16.1',
         'scipy>=1.2.1',
         'matplotlib>=3.0.3',
-        'opencv-python>=4.0.1.24',
         'requests>=2.21.0',
         'ipython'],
     package_data={

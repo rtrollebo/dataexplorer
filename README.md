@@ -20,7 +20,11 @@ The package can be used in image processing, and to manage one or several featur
 
 This packages contains implementations of the *principal components* techniques, which enable description and reduction of complex data with simple geometric structures.   
 
-### Examples
+## Installation
+
+Dependencies are defined in `requirements.txt`. When using a virtual environment, dependencies can be installed with `pip install -r requirements`. Recommended python version is >= 3.9.  
+
+## Examples
 
 Examples are available as Jupyter notebooks in [example_principal_components.ipynb](example_principal_components.ipynb) and [example_spatial_field.ipynb](example_spatial_field.ipynb). 
  
