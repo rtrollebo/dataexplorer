@@ -22,7 +22,9 @@ This packages contains implementations of the *principal components* techniques,
 
 ## Installation
 
-Dependencies are defined in `requirements.txt`. When using a virtual environment, dependencies can be installed with `pip install -r requirements`. Recommended python version is >= 3.9.  
+Dependencies are defined in `requirements.txt`. When using a virtual environment, dependencies can be installed with `pip install -r requirements`. 
+
+Python version: Minimum requirements: >= 3.9. Recommended > 3.11.4
 
 ## Examples
 
