@@ -4,6 +4,14 @@ from pyspatialfield.field.featurefield import FeatureField
 
 class TestSpatialMoments(unittest.TestCase):
 
+    dataset_1, \
+        dataset_2,\
+        dataset_3,\
+        dataset_4,\
+        dataset_5 = [None for i in range(5)]
+
+
+
     @classmethod
     def setUpClass(cls):
 

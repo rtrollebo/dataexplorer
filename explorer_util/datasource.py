@@ -5,11 +5,13 @@ from io import BytesIO
 import base64
 from numpy import genfromtxt
 
+
 class DataSource(object):
     """
     Generic data reader/writer
         """
-    def __init__(self, source = None, source_type = None):
+
+    def __init__(self, source=None, source_type=None):
         self.source = source
 
     def load(self, filename):
@@ -46,6 +48,7 @@ class DataDecoder(object):
     """
     Data decoder
     """
+
     def __init__(self, data):
         self.data = data
 
@@ -68,15 +71,15 @@ class DataDecoder(object):
         raise NotImplementedError("inspect() API method not yet implemented")
 
 
-def decode_image_to_array(membuf):
+def decode_image_to_array(buf):
     """
     Image decoder
-    :param membuf: memory buffer with image data
-    :type membuf:
+    :param buf: memory buffer with image data
+    :type buf:
     :return: array [width, height, cc] of image pixel data, with cc: colorchannels.
     :rtype: numpy.ndarray
     """
-    memory_stream = BytesIO(membuf)
+    memory_stream = BytesIO(buf)
     try:
         memory_stream.seek(0)
         image_object = pilimage.open(memory_stream, mode="r")
@@ -89,6 +92,7 @@ def decode_image_to_array(membuf):
         if not memory_stream.closed:
             memory_stream.close()
     return data_array
+
 
 def base64_decode(data):
     return base64.b64decode(data)

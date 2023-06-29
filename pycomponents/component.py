@@ -20,8 +20,8 @@ class Component(object):
         :return: tuple of center vector, eigenvalues and eigenvector
         """
         center_vector = np.mean(data, 0)
-        covmat = np.cov(data.T)
-        eigen_values, eigen_vector = linalg.eig(covmat)
+        cov_mat = np.cov(data.T)
+        eigen_values, eigen_vector = linalg.eig(cov_mat)
         return center_vector, eigen_values, eigen_vector
 
 
@@ -35,8 +35,8 @@ class ComponentEvaluator(object):
         return self
 
     def __next__(self):
-        indx = self.component_index
+        index = self.component_index
         if self.component_index >= self.eigen_vector.shape[0]:
             raise StopIteration
         self.component_index += 1
-        return Component(self.center_vector, np.sqrt(self.eigen_values[indx]), self.eigen_vector.T[indx])
+        return Component(self.center_vector, np.sqrt(self.eigen_values[index]), self.eigen_vector.T[index])
