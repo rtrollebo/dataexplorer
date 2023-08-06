@@ -4,12 +4,13 @@ from PIL import Image as pilimage
 from io import BytesIO
 import base64
 from numpy import genfromtxt
+from openpyxl import load_workbook
 
 
 class DataSource(object):
     """
     Generic data reader/writer
-        """
+    """
 
     def __init__(self, source=None, source_type=None):
         self.source = source
@@ -71,27 +72,8 @@ class DataDecoder(object):
         raise NotImplementedError("inspect() API method not yet implemented")
 
 
-def decode_image_to_array(buf):
-    """
-    Image decoder
-    :param buf: memory buffer with image data
-    :type buf:
-    :return: array [width, height, cc] of image pixel data, with cc: colorchannels.
-    :rtype: numpy.ndarray
-    """
-    memory_stream = BytesIO(buf)
-    try:
-        memory_stream.seek(0)
-        image_object = pilimage.open(memory_stream, mode="r")
-        data_array = np.array(image_object).astype(np.float32)
-    except IOError as io_error:
-        raise IOError("Unable to read buffer: {0}".format(io_error))
-    except:
-        raise IOError("Unexpected error while reading buffer")
-    finally:
-        if not memory_stream.closed:
-            memory_stream.close()
-    return data_array
+def decode_image_to_array(buf: bytes):
+    return _process_data_buffer(buf, _decode_image_to_array)
 
 
 def base64_decode(data):
@@ -114,3 +96,42 @@ class CallbackRunner(object):
             for f in self.callbacks:
                 processed_data = f(processed_data)
             return processed_data
+
+
+def get_columns_from_xlsx_workbook(wb):
+    allrows = np.array([row for row in wb.active.iter_rows(min_row=2, max_col=2, max_row=50, values_only=True)])
+    return np.array([i for i in allrows if i[0] is not None])
+
+
+def load_excel_doc_from_buf(buf: bytes):
+    return _process_data_buffer(buf, _load_excel_doc_from_buf)
+
+
+def _decode_image_to_array(bytesio: BytesIO):
+    """
+    Image decoder
+    :param buf: memory buffer with image data
+    :type buf:
+    :return: array [width, height, cc] of image pixel data, with cc: colorchannels.
+    :rtype: numpy.ndarray
+    """
+    image_object = pilimage.open(bytesio, mode="r")
+    return np.array(image_object).astype(np.float32)
+
+
+def _load_excel_doc_from_buf(bytesio: BytesIO):
+    return load_workbook(bytesio)
+
+
+def _process_data_buffer(buf: bytes, func):
+    memory_stream = BytesIO(buf)
+    try:
+        memory_stream.seek(0)
+        return func(memory_stream)
+    except IOError as io_error:
+        raise IOError("Unable to read buffer: {0}".format(io_error))
+    except:
+        raise IOError("Unexpected error while reading buffer")
+    finally:
+        if not memory_stream.closed:
+            memory_stream.close()
