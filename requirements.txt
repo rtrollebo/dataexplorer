@@ -2,7 +2,7 @@ numpy==1.25.0
 scipy==1.10.0
 matplotlib==3.4.3
 Pillow>=6.0.0
-requests==2.21.0
+requests==2.31.0
 ipython==8.10.0
 jupyter==1.0.0
 openpyxl == 3.1.2
