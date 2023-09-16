@@ -1,5 +1,5 @@
 numpy==1.25.0
-scipy==1.9.3
+scipy==1.10.0
 matplotlib==3.4.3
 Pillow>=6.0.0
 requests==2.21.0
