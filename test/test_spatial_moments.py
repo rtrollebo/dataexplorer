@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 from pyspatialfield.field.featurefield import FeatureField
 
+
 class TestSpatialMoments(unittest.TestCase):
 
     dataset_1, \
@@ -9,8 +10,6 @@ class TestSpatialMoments(unittest.TestCase):
         dataset_3,\
         dataset_4,\
         dataset_5 = [None for i in range(5)]
-
-
 
     @classmethod
     def setUpClass(cls):
@@ -46,7 +45,6 @@ class TestSpatialMoments(unittest.TestCase):
         cls.dataset_5 = np.full((10, 10), 0, dtype=int)
         cls.dataset_5[2:4, 2:4] = 1
         cls.dataset_5[6:8, 2:5] = 2
-
 
     @classmethod
     def tearDownClass(cls):
