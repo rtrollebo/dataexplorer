@@ -12,7 +12,7 @@ class TestNnet(unittest.TestCase):
     def create_test_data_1():
         nodes1 = [np.array([0.35, 0.9]), np.array([0.0, 0.0]), np.array([0.0])]
         weights1 = [None, np.array([[0.1, 0.4], [0.8, 0.6]]), np.array([0.3, 0.9])]
-        arc1 = Architecture([Layer(2), Layer(2), Layer(1)])
+        arc1 = Architecture([Layer(2, name="Input"), Layer(2, name="Hidden"), Layer(1, name="Output")])
         return Network(arc1, nodes1, np.array([0.5]), weights1)
 
     @classmethod

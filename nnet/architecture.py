@@ -7,6 +7,10 @@ import numpy as np
 class Layer:
     def __init__(self, size: int, name=None):
         self.size = size
+        self.name = name if name is not None else ""
+
+    def __repr__(self):
+        return "Layer "+self.name
 
 
 class Architecture:
