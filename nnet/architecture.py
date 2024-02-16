@@ -31,7 +31,7 @@ class Architecture:
 class Network:
 
     def __init__(self, architecture: Architecture, nodes: [np.ndarray], nodes_target: np.ndarray,
-                 weights: [np.ndarray], error=None):
+                 weights: [np.ndarray], error=None, learning_rate=1):
         """
         A type for the data of the nnet
         :param architecture: The architecture of the network
@@ -47,7 +47,24 @@ class Network:
         self.nodes_target = nodes_target
         self.weights = weights
         self.error = error
+        self.learning_rate = learning_rate
         self.validate()
+
+    def initiate(self):
+        """
+        Initial weights of the nnet
+        :return:
+        """
+        for i, layer in enumerate(self.architecture.layers):
+            if i == 0:
+                continue
+            self.weights[i] = self.weights[i] = np.random.uniform(
+                -1,
+                1,
+                (self.architecture.layers[i-1].size, self.architecture.layers[i].size))
+
+
+
 
     def validate(self):
         self._validate_network()

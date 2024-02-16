@@ -85,7 +85,7 @@ def update_weights(network: Network, layer: int):
     array([[0.09915663, 0.39286617],
            [0.79915663, 0.59286617]])
     """
-    network.weights[layer] = network.weights[layer]+(network.error[layer]*network.nodes[layer-1])
+    network.weights[layer] = network.weights[layer]+(network.learning_rate*network.error[layer]*network.nodes[layer-1])
 
 
 def run(network: Network, iterations=10):
