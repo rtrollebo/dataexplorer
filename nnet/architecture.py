@@ -38,6 +38,7 @@ class Network:
         :param nodes: The nodes of the network
         :param nodes_target: The target of the network
         :param weights: The weights of the network
+        :param learning_rate: The learning rate of the network
         :param error: The error of an iteration of the network (a dynamic parameter used when iterations are run)
         """
         if error is None:
@@ -62,9 +63,6 @@ class Network:
                 -1,
                 1,
                 (self.architecture.layers[i-1].size, self.architecture.layers[i].size))
-
-
-
 
     def validate(self):
         self._validate_network()
