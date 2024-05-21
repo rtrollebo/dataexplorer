@@ -1,7 +1,7 @@
 numpy==1.25.0
 scipy==1.13.0
 matplotlib==3.4.3
-requests==2.31.0
+requests==2.32.0
 ipython==8.10.0
 jupyter==1.0.0
 openpyxl == 3.1.2
