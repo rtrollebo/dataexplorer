@@ -1,6 +1,10 @@
 
 
+
 # Data explorer
+
+![test status](https://github.com/rtrollebo/dataexplorer/actions/workflows/runtests.yml/badge.svg)
+![Last commit](https://img.shields.io/github/last-commit/rtrollebo/dataexplorer)
 
 This is a collection of data reduction and analysis routines.  
 
